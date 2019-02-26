@@ -20,7 +20,7 @@ class EventsController: UICollectionViewController, UICollectionViewDelegateFlow
     
     fileprivate func extractEvents() {
         for ele in eventArray {
-            if ele.id == eventID {
+            if ele.category == eventID {
                 data.append(ele)
             }
         }
