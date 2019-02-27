@@ -14,7 +14,6 @@ class CategoryController: UICollectionViewController, UICollectionViewDelegateFl
     var tapped: String = ""
     var container = CategoryContainer()
     var data: [DataStruct] = []
-    
     var eventArray: [EventStruct] = []
     
     //rgb(201, 75, 75)

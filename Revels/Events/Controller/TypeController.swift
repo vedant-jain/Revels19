@@ -28,14 +28,31 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         self.title = "Events"
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        networking()
+        
+//        let delaySeconds = 1.5
+//        DispatchQueue.main.asyncAfter(deadline: .now() + delaySeconds) {
+//            self.collectionView.reloadData()
+//        }
         
         collectionView?.register(TypeCell.self, forCellWithReuseIdentifier: cellID)
         
-        networking()
+    }
+    
+    fileprivate func updateCount() {
+        for t in 0...2 {
+            for ele in self.container.data {
+                if ele.type == self.type[t].uppercased() {
+                    self.eventCount[t] = self.eventCount[t] + 1
+                }
+            }
+        }
+        print(eventCount)
         
     }
     
     fileprivate func networking() {
+        LoadingOverlay.shared.showOverlay(view: self.view)
         let jsonURLString: String = "http://api.mitrevels.in/categories"
         guard let url:URL = URL(string: jsonURLString) else {return}
         
@@ -47,23 +64,15 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 return
             }
             guard let data = data else {return}
-            //            let dataAsString = String(data: data, encoding: .utf8)
             
             do {
                 self.container = try JSONDecoder().decode(CategoryContainer.self, from: data)
-                //use container.data for actual data
-                if (self.container.success == true) {
-                    // success
-                    for t in 0...2 {
-                        print(t)
-                        for ele in self.container.data {
-                            if ele.type == self.type[t].uppercased() {
-                                self.eventCount[t] = self.eventCount[t] + 1
-                            }
-                        }
-                    }
-                    
+                self.updateCount()
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                    LoadingOverlay.shared.hideOverlayView()
                 }
+                
             }
             catch let jsonErr {
                 print("Error serializing json: ", jsonErr)
@@ -72,13 +81,17 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }.resume()
         
         print("got data")
+//        let delaySeconds = 1.0
+//        DispatchQueue.main.asyncAfter(deadline: .now() + delaySeconds) {
+//
+//        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: TypeCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! TypeCell
         cell.layer.insertSublayer(gradient(frame: (cell.bounds), firstColor: firstColour[indexPath.item%firstColour.count], secondColor: secondColour[indexPath.item%secondColour.count]), at: 0)
         cell.title.text = type[indexPath.item]
-        cell.category.text = String(eventCount[indexPath.item]) + " events"
+        cell.category.text = String(eventCount[indexPath.item]) + " categories"
         cell.imageView = UIImageView.init(image: UIImage.init(named: "CellIcons"))
         return cell
     }
