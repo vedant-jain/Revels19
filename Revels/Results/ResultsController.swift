@@ -8,39 +8,67 @@
 
 import UIKit
 
-class ResultsController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class ResultsController: UITableViewController {
     
     private let cellID = "cellID"
+    
+    private var resultsArray = [ResultsStruct]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView!.register(ResultCell.self, forCellWithReuseIdentifier: cellID)
+        tableView.register(ResultsCell.self, forCellReuseIdentifier: cellID)
         
-        collectionView.backgroundColor = .white
-        let titleLabel = UILabel()
-        titleLabel.text = "Results"
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 22)
-        titleLabel.sizeToFit()
+        tableView.backgroundColor = .white
         
-        let leftItem = UIBarButtonItem(customView: titleLabel)
-        self.navigationItem.leftBarButtonItem = leftItem
+        self.title = "Results"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         
-        collectionView.dataSource = self;
-        collectionView.delegate = self;
+        networking()
+        
+        tableView.dataSource = self;
+        tableView.delegate = self;
     }
     
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+    fileprivate func networking() {
+        LoadingOverlay.shared.showOverlay(view: self.view)
+        let jsonURLString: String = "http://api.mitrevels.in/results"
+        guard let url:URL = URL(string: jsonURLString) else {return}
+        
+        URLSession.shared.dataTask(with: url) { (data, response, err) in
+            
+            //check for error?
+            if let err = err {
+                print("Failed to get data from url", err)
+                return
+            }
+            guard let data = data else {return}
+            
+            do {
+                let res = try JSONDecoder().decode(ResultsContainer.self, from: data)
+                self.resultsArray = res.data
+                print(self.resultsArray)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                    LoadingOverlay.shared.hideOverlayView()
+                }
+            }
+            catch let jsonErr {
+                print("Error serializing json: ", jsonErr)
+            }
+            
+            }.resume()
+        
+        print("got data")
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: ResultCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ResultCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: ResultsCell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! ResultsCell
         return cell
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 16
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return resultsArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

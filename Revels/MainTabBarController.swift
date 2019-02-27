@@ -34,7 +34,7 @@ class MainTabBarController: UITabBarController {
         typeNavigationController.tabBarItem = UITabBarItem(title: "Events", image: UIImage(named: "events"), tag: 2)
         
         //results page
-        let resultsController = ResultsController(collectionViewLayout: UICollectionViewFlowLayout())
+        let resultsController = ResultsController()
         let resultsNavigationController = UINavigationController(rootViewController: resultsController)
         resultsNavigationController.tabBarItem = UITabBarItem(title: "Results", image: UIImage(named: "results"), tag: 3)
         

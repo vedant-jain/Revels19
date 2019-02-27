@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct DataStruct: Decodable {
+struct CategoryStruct: Decodable {
     let id: Int
     let name: String
     let type: String
@@ -17,39 +17,7 @@ struct DataStruct: Decodable {
     let cc1_contact: String
     let cc2_name: String
     let cc2_contact: String
-    
-    init() {
-        id = -1
-        name = ""
-        type = ""
-        description = ""
-        cc1_name = ""
-        cc1_contact = ""
-        cc2_name = ""
-        cc2_contact = ""
-    }
 }
-
-struct CategoryContainer: Decodable {
-    let success: Bool
-    let data: [DataStruct]
-    
-    init() {
-        success = false
-        data = [DataStruct.init()]
-    }
-}
-
-struct EventContainer: Decodable {
-    let success: Bool
-    let data: [EventStruct]
-    
-    init() {
-        success = false
-        data = [EventStruct.init()]
-    }
-}
-
 
 struct EventStruct: Decodable {
     let id: Int
@@ -60,15 +28,15 @@ struct EventStruct: Decodable {
     let min_size: Int
     let max_size: Int
     let del_card_type: Int
-    
-    init() {
-        id = -1
-        name = ""
-        category = -1
-        short_desc = ""
-        long_desc = ""
-        min_size = -1
-        max_size = -1
-        del_card_type = -1
-    }
+}
+
+//only for parsing; not used anywhere in code
+struct CategoryContainer: Decodable {
+    let success: Bool
+    let data: [CategoryStruct]
+}
+
+struct EventContainer: Decodable {
+    let success: Bool
+    let data: [EventStruct]
 }

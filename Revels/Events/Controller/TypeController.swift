@@ -13,7 +13,9 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     private let cellID = "cellID"
     private var type: [String] = ["Cultural", "Open", "Supporting"]
     private var eventCount: [Int] = [0, 0, 0]
-    var container = CategoryContainer()
+    var data = [CategoryStruct]()
+    
+    //gradients
     private var firstColour: [UIColor] = [UIColor.init(r: 227, g: 122, b: 180), UIColor.init(r: 247, g: 226, b: 170), UIColor.init(r: 135, g: 145, b: 179), UIColor.init(r: 33, g: 147, b: 176), UIColor.init(r: 201, g: 75, b: 75)]
     private var secondColour: [UIColor] = [UIColor.init(r: 228, g: 144, b: 151), UIColor.init(r: 223, g: 168, b: 157), UIColor.init(r: 128, g: 91, b: 146), UIColor.init(r: 109, g: 213, b: 237), UIColor.init(r: 75, g: 19, b: 79)]
     
@@ -41,7 +43,7 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     fileprivate func updateCount() {
         for t in 0...2 {
-            for ele in self.container.data {
+            for ele in data {
                 if ele.type == self.type[t].uppercased() {
                     self.eventCount[t] = self.eventCount[t] + 1
                 }
@@ -66,8 +68,14 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             guard let data = data else {return}
             
             do {
-                self.container = try JSONDecoder().decode(CategoryContainer.self, from: data)
+                
+                // parse
+                self.data = try JSONDecoder().decode(CategoryContainer.self, from: data).data
+                
+                // get # of categories for each type
                 self.updateCount()
+                
+                //remove loading overlay
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                     LoadingOverlay.shared.hideOverlayView()
@@ -81,10 +89,6 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }.resume()
         
         print("got data")
-//        let delaySeconds = 1.0
-//        DispatchQueue.main.asyncAfter(deadline: .now() + delaySeconds) {
-//
-//        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -101,9 +105,9 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let categoryController = CategoryController(collectionViewLayout: UICollectionViewFlowLayout())
+        let categoryController = CategoryController()
         categoryController.tapped = type[indexPath.item]
-        categoryController.container = self.container
+        categoryController.data = self.data
         self.navigationController?.pushViewController(categoryController, animated: true)
     }
     
