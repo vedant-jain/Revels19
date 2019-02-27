@@ -17,10 +17,21 @@ class ResultsCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        setupViews()
     }
     
+    var label: UILabel = {
+        let label = UILabel()
+        
+        return UILabel()
+    }()
     
+    func setupViews() {
+    
+        addSubview(label)
+        
+        label.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+    
+    }
 
 }

@@ -23,3 +23,14 @@ struct ResultsStruct: Decodable {
     let round: Int
     
 }
+
+
+// used this to keep track of sections
+struct SectionState {
+
+    var isExpanded: Bool
+    var eventID: Int
+    var count: Int
+    var results: [ResultsStruct]
+    
+}
