@@ -121,7 +121,12 @@ class CategoryController: UITableViewController {
         let eventsController = EventsController()
         eventsController.tapped = data[indexPath.item].name
         eventsController.eventID = data[indexPath.item].id
-        eventsController.eventArray = self.eventArray
+        for ele in eventArray {
+            if ele.category == eventsController.eventID {
+                eventsController.data.append(ele)
+            }
+        }
+        if eventsController.data.count == 0 {return}
         self.navigationController?.pushViewController(eventsController, animated: true)
     }
     

@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import DeckTransition
+import UserNotifications
 
 class ScheduleController: UICollectionViewController, UICollectionViewDelegateFlowLayout, MenuControllerDelegate{
     
@@ -72,6 +73,22 @@ class ScheduleController: UICollectionViewController, UICollectionViewDelegateFl
 
         let cancel = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
         let reminderAction = UIAlertAction(title: "Set Reminder", style: .default){ action in
+            
+            let content = UNMutableNotificationContent()
+            content.title = event.event?.name ?? "Upcoming Event"
+            content.body = "You have an event coming up at " + event.eventVenue! ?? "NLH 000" + " " + event.eventTime! ?? "00:00 PM"
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+            let start = "" //startTime
+            let end = "" //endTime
+            let startDate = formatter.date(from: start)
+            let endDate = formatter.date(from: end)
+            var date = DateComponents()
+            date.hour = 8 // 24 hour system
+            date.minute = 00
+            let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
+            let request = UNNotificationRequest(identifier: "notificationID", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
             
             return
         }

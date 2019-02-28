@@ -91,7 +91,12 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         cell.layer.insertSublayer(gradient(frame: (cell.bounds), firstColor: firstColour[indexPath.item%firstColour.count], secondColor: secondColour[indexPath.item%secondColour.count]), at: 0)
         cell.title.text = type[indexPath.item]
         cell.category.text = String(eventCount[indexPath.item]) + " categories"
-        cell.imageView = UIImageView.init(image: UIImage.init(named: "CellIcons"))
+        if indexPath.item == 0 {
+            cell.imageView = UIImageView.init(image: UIImage.init(named: "culturalLogo"))
+            cell.bgImageView = UIImageView.init(image: UIImage.init(named:"culturalLogo"))
+        } else {
+            cell.imageView = UIImageView.init(image: UIImage.init(named: "CellIcons"))
+        }
         return cell
     }
     
