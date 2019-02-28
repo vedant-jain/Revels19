@@ -130,6 +130,12 @@ class ResultsController: UITableViewController {
                 return button
             }()
             
+            let border: UIView = {
+                let border = UIView(frame: CGRect(x: 0, y: 0, width: 1000, height: 0.3))
+                border.backgroundColor = UIColor(r: 211, g: 211, b: 211)
+                return border
+            }()
+            
             let eventLabel: UILabel = {
                 let label = UILabel()
                 label.text = String(sectionArray[section].name)
@@ -143,22 +149,15 @@ class ResultsController: UITableViewController {
             view.backgroundColor = .white
             view.addSubview(collapseButton)
             view.addSubview(eventLabel)
+            view.addSubview(border)
+            
             
             view.bringSubviewToFront(collapseButton)
             
-            eventLabel.frame = CGRect(x: 16, y: 16, width: view.frame.width-16, height: view.frame.height-32)
+            eventLabel.frame = CGRect(x: 16, y: 0, width: view.frame.width-16, height: view.frame.height)
             collapseButton.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
-            
-            //            eventLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
-            //            eventLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
-            //            eventLabel.trailingAnchor.constraint(equalTo: collapseButton.leadingAnchor, constant: -8).isActive = true
-            //            eventLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 8).isActive = true
-            //
-            //            collapseButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
-            //            collapseButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 16).isActive = true
-            //            collapseButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 8).isActive = true
-            //            collapseButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-            
+            border.frame = CGRect(x: 16, y: view.frame.height+3.3, width: 1000, height: 0.3)
+
             return view
         }()
         
@@ -204,9 +203,15 @@ class ResultsController: UITableViewController {
         }
         else {
             let result = sectionArray[indexPath.section].results[indexPath.item]
-            cell.roundLabel.text = String(result.round)
-            cell.positionLabel.text = String(result.position)
-            cell.teamLabel.text = String(result.teamid)
+            cell.roundLabel.text = "\t" + String(result.round)
+            cell.positionLabel.text = "\t" + String(result.position)
+            cell.teamLabel.text = "\t" + String(result.teamid)
+        }
+        if indexPath.item % 2 == 0 {
+            cell.backgroundColor = UIColor(r: 240, g: 240, b: 240)
+        }
+        else {
+            cell.backgroundColor = UIColor(r: 230, g: 230, b: 230)
         }
         cell.selectionStyle = .none
         return cell

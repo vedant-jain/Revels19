@@ -57,7 +57,7 @@
 		6F0864822228504B00F5C415 /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
 		6F2E2BF821EE55C60019AD4E /* HomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCell.swift; sourceTree = "<group>"; };
 		6F2E2BFA21EE75AC0019AD4E /* DetailsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsCell.swift; sourceTree = "<group>"; };
-		6F5980382227AEE60093FF60 /* ResultsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResultsCell.swift; path = ../../../../Desktop/Revels19/Revels/Results/ResultsCell.swift; sourceTree = "<group>"; };
+		6F5980382227AEE60093FF60 /* ResultsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsCell.swift; sourceTree = "<group>"; };
 		6F59803D2227BCF00093FF60 /* ResultsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsModel.swift; sourceTree = "<group>"; };
 		6F59803F2227BD110093FF60 /* ResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsController.swift; sourceTree = "<group>"; };
 		6F5980412227BD2E0093FF60 /* ResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsController.swift; sourceTree = "<group>"; };
@@ -152,6 +152,32 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		6F086487222889C500F5C415 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6F59803D2227BCF00093FF60 /* ResultsModel.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		6F086488222889D400F5C415 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6F5980432227BD3C0093FF60 /* ResultsCell.swift */,
+				6F5980382227AEE60093FF60 /* ResultsCell.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		6F086489222889D900F5C415 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6F5980412227BD2E0093FF60 /* ResultsController.swift */,
+				6F59803F2227BD110093FF60 /* ResultsController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
 		6F2E2BF521EE54BF0019AD4E /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,11 +192,9 @@
 		6F2E2C0321EF6A130019AD4E /* Results */ = {
 			isa = PBXGroup;
 			children = (
-				6F5980382227AEE60093FF60 /* ResultsCell.swift */,
-				6F59803F2227BD110093FF60 /* ResultsController.swift */,
-				6F5980412227BD2E0093FF60 /* ResultsController.swift */,
-				6F59803D2227BCF00093FF60 /* ResultsModel.swift */,
-				6F5980432227BD3C0093FF60 /* ResultsCell.swift */,
+				6F086489222889D900F5C415 /* Controller */,
+				6F086488222889D400F5C415 /* View */,
+				6F086487222889C500F5C415 /* Model */,
 			);
 			path = Results;
 			sourceTree = "<group>";

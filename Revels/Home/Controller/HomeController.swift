@@ -149,7 +149,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             cell.liveBlogButton.setBackgroundImage(UIImage(named: "newspaper2"), for: .normal)
             cell.instagramButton.tag = 2
             cell.instagramButton.addTarget(self, action: #selector(openLink), for: .touchUpInside)
-            cell.instagramButton.setBackgroundImage(UIImage(named: "ig"), for: .normal)
+            cell.instagramButton.setBackgroundImage(UIImage(named: "ig-1"), for: .normal)
             return cell
         } else {
             let cell: HomeCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! HomeCell
@@ -224,11 +224,17 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
         else {
             // open instagram
-            urlString = "http://instagram.com/mitrevels"
-            url = URL(string: urlString)
-            let safariVC = SFSafariViewController(url: url ?? URL(string: "https://instagram.com/mitrevels")!)
-            self.present(safariVC, animated: true, completion: nil)
-            safariVC.delegate = self
+            let Username =  "revelsmit"
+            let appURL = URL(string: "instagram://user?username=\(Username)")!
+            let application = UIApplication.shared
+            
+            if application.canOpenURL(appURL) {
+                application.open(appURL)
+            } else {
+                // if Instagram app is not installed, open URL inside Safari
+                let webURL = URL(string: "https://instagram.com/\(Username)")!
+                application.open(webURL)
+            }
         }
     }
 

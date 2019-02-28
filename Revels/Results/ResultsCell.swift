@@ -22,19 +22,19 @@ class ResultsCell: UITableViewCell {
     
     var roundLabel: UILabel = {
         let label = UILabel()
-        
+        label.textAlignment = .center
         return UILabel()
     }()
     
     var positionLabel: UILabel = {
         let label = UILabel()
-        
+        label.textAlignment = .center
         return UILabel()
     }()
     
     var teamLabel: UILabel = {
         let label = UILabel()
-        
+        label.textAlignment = .center
         return UILabel()
     }()
     
@@ -46,7 +46,7 @@ class ResultsCell: UITableViewCell {
         
         roundLabel.frame = CGRect(x: 16, y: 0, width: 100, height: frame.height)
         positionLabel.frame = CGRect(x: 132, y: 0, width: 100, height: frame.height)
-        teamLabel.frame = CGRect(x: 260, y: 0, width: 100, height: frame.height)
+        teamLabel.frame = CGRect(x: 245, y: 0, width: 100, height: frame.height)
         
     }
     
