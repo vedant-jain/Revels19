@@ -6,5 +6,8 @@ target 'Revels' do
   use_frameworks!
 
   # Pods for Revels
-
+  pod 'Alamofire'
+  pod 'lottie-ios'
+  pod 'DeckTransition'
+  pod 'SDWebImage'
 end

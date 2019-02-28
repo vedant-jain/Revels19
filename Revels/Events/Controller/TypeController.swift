@@ -32,11 +32,6 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         networking()
         
-//        let delaySeconds = 1.5
-//        DispatchQueue.main.asyncAfter(deadline: .now() + delaySeconds) {
-//            self.collectionView.reloadData()
-//        }
-        
         collectionView?.register(TypeCell.self, forCellWithReuseIdentifier: cellID)
         
     }
@@ -55,7 +50,7 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     fileprivate func networking() {
         LoadingOverlay.shared.showOverlay(view: self.view)
-        let jsonURLString: String = "http://api.mitrevels.in/categories"
+        let jsonURLString: String = "https://api.mitrevels.in/categories"
         guard let url:URL = URL(string: jsonURLString) else {return}
         
         URLSession.shared.dataTask(with: url) { (data, response, err) in
@@ -107,7 +102,12 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let categoryController = CategoryController()
         categoryController.tapped = type[indexPath.item]
-        categoryController.data = self.data
+        print(categoryController.tapped)
+        for ele in data {
+            if ele.type == type[indexPath.item].uppercased() {
+                categoryController.data.append(ele)
+            }
+        }
         self.navigationController?.pushViewController(categoryController, animated: true)
     }
     

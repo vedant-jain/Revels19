@@ -52,6 +52,7 @@ class EventTableViewCell: UITableViewCell {
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
+        label.textAlignment = .left
         return label
     }()
     
@@ -59,6 +60,7 @@ class EventTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .right
         label.textColor = .white
         return label
     }()
@@ -71,47 +73,12 @@ class EventTableViewCell: UITableViewCell {
         addSubview(sizeLabel)
         addSubview(delegateCardLabel)
         
-        setupTitleLabel()
-        setupSizeLabel()
-        setupDescLabel()
-        setupDelegateCardLabel()
-        setupBackgroundCard()
-        
-    }
-    
-    fileprivate func setupDelegateCardLabel() {
-        delegateCardLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
-        delegateCardLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: frame.width-150).isActive = true
-        delegateCardLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 16).isActive = true
-        delegateCardLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
-    }
-    
-    fileprivate func setupTitleLabel() {
-        titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 16).isActive = true
-        titleLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-    }
-    
-    fileprivate func setupSizeLabel() {
-        sizeLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
-        sizeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        sizeLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 16).isActive = true
-        sizeLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
-    }
-    
-    fileprivate func setupDescLabel() {
-        descLabel.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 28).isActive = true
-        descLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        descLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
-        descLabel.bottomAnchor.constraint(equalTo: sizeLabel.topAnchor, constant: -16).isActive = true
-    }
-    
-    fileprivate func setupBackgroundCard() {
-        backgroundCard.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -16).isActive = true
-        backgroundCard.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -16).isActive = true
-        backgroundCard.trailingAnchor.constraint(equalTo: descLabel.trailingAnchor, constant: 16).isActive = true
-        backgroundCard.bottomAnchor.constraint(equalTo: sizeLabel.bottomAnchor, constant: 16).isActive = true
+        _ = backgroundCard.anchor(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 0, heightConstant: 0)
+        _ = titleLabel.anchor(backgroundCard.topAnchor, left: backgroundCard.leftAnchor, bottom: nil, right: nil
+            , topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 25)
+        _ = descLabel.anchor(titleLabel.bottomAnchor, left: backgroundCard.leftAnchor, bottom: delegateCardLabel.topAnchor, right: backgroundCard.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 0, heightConstant: 0)
+        _ = delegateCardLabel.anchor(nil, left: backgroundCard.leftAnchor, bottom: backgroundCard.bottomAnchor, right: backgroundCard.rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 0, heightConstant: 25)
+        _ = sizeLabel.anchor(nil, left: backgroundCard.leftAnchor, bottom: backgroundCard.bottomAnchor, right: backgroundCard.rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 0, heightConstant: 25)
     }
     
 }

@@ -2,11 +2,12 @@
 //  ResultsController.swift
 //  Revels
 //
-//  Created by Vedant Jain on 16/01/19.
+//  Created by Vedant Jain on 28/02/19.
 //  Copyright © 2019 Naman Jain. All rights reserved.
 //
 
 import UIKit
+import Alamofire
 
 class ResultsController: UITableViewController {
     
@@ -14,7 +15,9 @@ class ResultsController: UITableViewController {
     
     private var resultsArray = [ResultsStruct]()
     private var sectionArray = [SectionState]()
+    private var eventsArray = [EventStruct]()
     
+    private let preset = ["Round #", "Position", "Team Name"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,48 +35,74 @@ class ResultsController: UITableViewController {
         tableView.delegate = self;
     }
     
+    fileprivate func getEvents() {
+        Alamofire.request("https://api.mitrevels.in/events", method: .get, parameters: nil).responseJSON{ response in
+            switch response.result {
+            case .success:
+                if let data = response.data{
+                    do{
+                        self.eventsArray = try JSONDecoder().decode(EventContainer.self, from: data).data
+                        self.getResults()
+                    } catch let error{
+                        print(error)
+                    }
+                }
+                break
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    fileprivate func getResults() {
+        Alamofire.request("https://api.mitrevels.in/results", method: .get, parameters: nil).responseJSON{ response in
+            switch response.result {
+            case .success:
+                if let data = response.data{
+                    do{
+                        let res = try JSONDecoder().decode(ResultsContainer.self, from: data)
+                        self.resultsArray = res.data
+                        for ele in self.resultsArray {
+                            var present: Int = 0
+                            for i in 0 ..< self.sectionArray.count {
+                                if ele.event == self.sectionArray[i].eventID {
+                                    present = 1
+                                    self.sectionArray[i].count = self.sectionArray[i].count + 1
+                                    self.sectionArray[i].results.append(ele)
+                                }
+                            }
+                            if present == 0 {
+                                for j in self.eventsArray {
+                                    if j.id == ele.event {
+                                        self.sectionArray.append(SectionState(isExpanded: true, name: j.name, eventID: ele.event, count: 1, results: [ele]))
+                                    }
+                                }
+                            }
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                            LoadingOverlay.shared.hideOverlayView()
+                        }
+                    }catch let error{
+                        print(error)
+                    }
+                }
+                break
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
     fileprivate func networking() {
         LoadingOverlay.shared.showOverlay(view: self.view)
-        let jsonURLString: String = "http://api.mitrevels.in/results"
-        guard let url:URL = URL(string: jsonURLString) else {return}
         
-        URLSession.shared.dataTask(with: url) { (data, response, err) in
-            
-            //check for error?
-            if let err = err {
-                print("Failed to get data from url", err)
-                return
-            }
-            guard let data = data else {return}
-            
-            do {
-                let res = try JSONDecoder().decode(ResultsContainer.self, from: data)
-                self.resultsArray = res.data
-                for ele in self.resultsArray {
-                    var present: Int = 0
-                    for i in 0 ..< self.sectionArray.count {
-                        if ele.event == self.sectionArray[i].eventID {
-                            present = 1
-                            self.sectionArray[i].count = self.sectionArray[i].count + 1
-                            self.sectionArray[i].results.append(ele)
-                        }
-                    }
-                    if present == 0 {
-                        self.sectionArray.append(SectionState(isExpanded: true, eventID: ele.event, count: 1, results: [ele]))
-                    }
-                }
-                
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    LoadingOverlay.shared.hideOverlayView()
-                }
-                
-            }
-            catch let jsonErr {
-                print("Error serializing json: ", jsonErr)
-            }
-            
-            }.resume()
+        DispatchQueue.main.async {
+            self.getEvents()
+        }
+        
+        getResults()
         
         print("got data")
     }
@@ -90,7 +119,7 @@ class ResultsController: UITableViewController {
         
         let view: UIView = {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 64))
-
+            
             let collapseButton: UIButton = {
                 let button = UIButton(type: .system)
                 button.setTitle(sectionArray[section].isExpanded ? "Show Less" : "Show More", for: .normal)
@@ -98,34 +127,34 @@ class ResultsController: UITableViewController {
                 button.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
                 return button
             }()
-
+            
             let eventLabel: UILabel = {
                 let label = UILabel()
                 label.text = "Event: " + String(sectionArray[section].eventID)
                 label.font = UIFont.boldSystemFont(ofSize: 28)
                 return label
             }()
-
+            
             view.backgroundColor = .white
             view.addSubview(collapseButton)
             view.addSubview(eventLabel)
             
             eventLabel.frame = CGRect(x: 16, y: 16, width: view.frame.width-128, height: view.frame.height-32)
             collapseButton.frame = CGRect(x: view.frame.width-128, y: 16, width: 128, height: view.frame.height-32)
-
-//            eventLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
-//            eventLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
-//            eventLabel.trailingAnchor.constraint(equalTo: collapseButton.leadingAnchor, constant: -8).isActive = true
-//            eventLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 8).isActive = true
-//
-//            collapseButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
-//            collapseButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 16).isActive = true
-//            collapseButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 8).isActive = true
-//            collapseButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-
+            
+            //            eventLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
+            //            eventLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
+            //            eventLabel.trailingAnchor.constraint(equalTo: collapseButton.leadingAnchor, constant: -8).isActive = true
+            //            eventLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 8).isActive = true
+            //
+            //            collapseButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
+            //            collapseButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 16).isActive = true
+            //            collapseButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 8).isActive = true
+            //            collapseButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+            
             return view
         }()
-
+        
         return view
         
     }
@@ -141,7 +170,7 @@ class ResultsController: UITableViewController {
         let section = button.tag
         let isExpanded = sectionArray[section].isExpanded
         var indexPaths: [IndexPath] = []
-        for row in 3 ..< sectionArray[section].count-1 {
+        for row in 4 ..< sectionArray[section].count {
             let indexPath = IndexPath(row: row, section: section)
             indexPaths.append(indexPath)
         }
@@ -159,18 +188,27 @@ class ResultsController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: ResultsCell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! ResultsCell
-        let result = sectionArray[indexPath.section].results[indexPath.item]
-        cell.label.text = "\tRound " + String(result.round) + "\t\t\t\t" + String(result.position) + "\t\t\t\t" + String(result.teamid)
+        if indexPath.item == 0 {
+            cell.roundLabel.text = preset[0]
+            cell.positionLabel.text = preset[1]
+            cell.teamLabel.text = preset[2]
+        }
+        else {
+            let result = sectionArray[indexPath.section].results[indexPath.item]
+            cell.roundLabel.text = String(result.round)
+            cell.positionLabel.text = String(result.position)
+            cell.teamLabel.text = String(result.teamid)
+        }
         cell.selectionStyle = .none
         return cell
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if sectionArray[section].isExpanded {
-            return sectionArray[section].count - 1
+            return sectionArray[section].count
         }
         else {
-            return 3
+            return 4
         }
     }
     

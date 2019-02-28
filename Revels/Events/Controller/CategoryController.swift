@@ -26,9 +26,7 @@ class CategoryController: UITableViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        
-        // for proper implementation (StackOverflow) ~> remove heightForItemAt function
-        // constraints were fucked so I'm using heightForItemAt
+
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 300
         
@@ -37,17 +35,11 @@ class CategoryController: UITableViewController {
         self.title = tapped
         self.navigationController?.navigationBar.prefersLargeTitles = true
         
-        for ele in data {
-            if ele.type == tapped.uppercased() {
-                data.append(ele)
-            }
-        }
-        
         getEvents()
     }
     
     func getEvents() {
-        let jsonURLString: String = "http://api.mitrevels.in/events"
+        let jsonURLString: String = "https://api.mitrevels.in/events"
         guard let url:URL = URL(string: jsonURLString) else {return}
         
         URLSession.shared.dataTask(with: url) { (data, response, err) in
@@ -110,9 +102,9 @@ class CategoryController: UITableViewController {
         cell.descLabel.text = data[indexPath.item].description
         
         //call button
-        cell.callButton.setTitle(data[indexPath.item].cc1_name + ": " + data[indexPath.item].cc1_contact + "\n" + data[indexPath.item].cc2_name + ": " + data[indexPath.item].cc2_contact, for: .normal)
         cell.callButton.tag = indexPath.row
-        cell.callButton.addTarget(self, action: "callButtonTapped:", for: UIControl.Event.touchUpInside)
+        cell.callButton.addTarget(self, action: #selector(CategoryController.callButtonTapped(_:)), for: UIControl.Event.touchUpInside)
+        cell.selectionStyle = .none
         return cell
     }
     

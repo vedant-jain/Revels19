@@ -1,8 +1,8 @@
 //
-//  Model.swift
+//  ResultsModel.swift
 //  Revels
 //
-//  Created by Vedant Jain on 27/02/19.
+//  Created by Vedant Jain on 28/02/19.
 //  Copyright © 2019 Naman Jain. All rights reserved.
 //
 
@@ -27,8 +27,9 @@ struct ResultsStruct: Decodable {
 
 // used this to keep track of sections
 struct SectionState {
-
+    
     var isExpanded: Bool
+    var name: String
     var eventID: Int
     var count: Int
     var results: [ResultsStruct]

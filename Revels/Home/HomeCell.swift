@@ -57,9 +57,9 @@ class HomeCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
         line.translatesAutoresizingMaskIntoConstraints = false
         return line
     }()
-    
+
     func setupViews() {
-        //        backgroundColor = .black
+//        backgroundColor = .black
         addSubview(title)
         addSubview(subtitle)
         addSubview(cellCollectionView)
@@ -74,6 +74,14 @@ class HomeCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
         _ = subtitle.anchor(title.bottomAnchor, left: leftAnchor, bottom: cellCollectionView.topAnchor, right: rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 0, rightConstant: 16, widthConstant: 0, heightConstant: 0)
         _ = cellCollectionView.anchor(nil, left: leftAnchor, bottom: dividerLineView.topAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 16, rightConstant: 0, widthConstant: 0, heightConstant: 100)
         _ = dividerLineView.anchor(nil, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0.5)
+        
+        
+        
+//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]-16-|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": title]))
+//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]-16-|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": subtitle]))
+//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": dividerLineView]))
+//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": cellCollectionView]))
+//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[title(30)][subtitle][cell][divider(0.5)]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["cell": cellCollectionView, "divider": dividerLineView, "title": title, "subtitle": subtitle]))
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -81,8 +89,8 @@ class HomeCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! DetailsCell
-        return cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! DetailsCell
+            return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -92,8 +100,6 @@ class HomeCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 14, left: 14, bottom: 14, right: 14)
     }
-    
+
 }
-
-
 

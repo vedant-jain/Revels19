@@ -26,6 +26,7 @@ public class LoadingOverlay{
 //        overlayView.backgroundColor = UIColor(r: 68, g: 68, b: 68)
         overlayView.frame = CGRect(x: 0, y: 0, width: 1000, height: 1000)
         overlayView.backgroundColor = .white
+        overlayView.isOpaque = true
 //        overlayView.alpha = 0.7
         overlayView.clipsToBounds = true
         overlayView.layer.cornerRadius = 10

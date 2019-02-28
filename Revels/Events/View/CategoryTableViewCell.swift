@@ -51,8 +51,9 @@ class CategoryTVCell: UITableViewCell {
     var callButton: UIButton = {
         let button = UIButton()
         
-        button.layer.cornerRadius = 0.5 * button.bounds.size.width // add the round corners in proportion to the button size
-        
+        button.layer.cornerRadius = 17
+        button.setImage(UIImage(named: "phone"), for: .normal)
+        button.backgroundColor = UIColor.init(white: 1, alpha: 0.3)
         
         return button
     }()
@@ -72,11 +73,17 @@ class CategoryTVCell: UITableViewCell {
         addSubview(descLabel)
         addSubview(callButton)
         
+        _ = backgroundCard.anchor(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 0, heightConstant: 0)
+        _ = titleLabel.anchor(backgroundCard.topAnchor, left: backgroundCard.leftAnchor, bottom: nil, right: nil
+            , topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 25)
+        _ = descLabel.anchor(titleLabel.bottomAnchor, left: backgroundCard.leftAnchor, bottom: callButton.topAnchor, right: backgroundCard.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 0, heightConstant: 0)
+        _ = callButton.anchor(nil, left: nil, bottom: backgroundCard.bottomAnchor, right: backgroundCard.rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 50, heightConstant: 50)
+        
         //for testing
-        backgroundCard.frame = CGRect(x: 16, y: 16, width: self.frame.width-32, height: self.frame.height-32)
-        titleLabel.frame = CGRect(x: 32, y: 32, width: self.frame.width-64, height: 25)
-        descLabel.frame = CGRect(x: 32, y: 80, width: self.frame.width-64, height: 130)
-        callButton.frame = CGRect(x: 32, y: 220, width: self.frame.width-64, height: 32)
+//        backgroundCard.frame = CGRect(x: 16, y: 16, width: self.frame.width-32, height: self.frame.height-32)
+//        titleLabel.frame = CGRect(x: 32, y: 32, width: self.frame.width-64, height: 25)
+//        descLabel.frame = CGRect(x: 32, y: 80, width: self.frame.width-64, height: 130)
+//        callButton.frame = CGRect(x: 32, y: 220, width: self.frame.width-64, height: 32)
         
 //        setupTitleLabel()
 //        setupCallButton()
@@ -108,11 +115,6 @@ class CategoryTVCell: UITableViewCell {
     }
     
     fileprivate func setupBackgroundCard() {
-//        backgroundCard.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -16).isActive = true
-//        backgroundCard.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -16).isActive = true
-//        backgroundCard.trailingAnchor.constraint(equalTo: descLabel.trailingAnchor, constant: 16).isActive = true
-//        backgroundCard.bottomAnchor.constraint(equalTo: callButton.bottomAnchor, constant: 16).isActive = true
-        
         
         backgroundCard.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
         backgroundCard.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true

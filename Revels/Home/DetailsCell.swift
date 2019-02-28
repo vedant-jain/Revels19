@@ -30,8 +30,8 @@ class DetailsCell: UICollectionViewCell {
     
     let title: UILabel = {
         let label = UILabel()
-        label.text = "The Incredible True Story"
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.text = "Two Lined Title Haha"
+        label.font = UIFont.systemFont(ofSize: 13)
         label.numberOfLines = 2
         return label
     }()
@@ -39,7 +39,7 @@ class DetailsCell: UICollectionViewCell {
     let category: UILabel = {
         let label = UILabel()
         label.text = "Entertainment"
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = UIFont.systemFont(ofSize: 11)
         label.textColor = .gray
         return label
     }()
@@ -50,9 +50,9 @@ class DetailsCell: UICollectionViewCell {
         addSubview(title)
         addSubview(category)
         
-        imageView.frame = CGRect(x: 0, y: 0, width: frame.width-10, height: frame.width-10)
-        title.frame = CGRect(x: 0, y: frame.width+2, width: frame.width-10, height: 40)
-        category.frame = CGRect(x: 0, y: frame.width + 45, width: frame.width-10, height: 20)
+        imageView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.width)
+        title.frame = CGRect(x: 0, y: frame.width+2, width: frame.width, height: 40)
+        category.frame = CGRect(x: 0, y: frame.width + 42, width: frame.width, height: 20)
         
     }
     

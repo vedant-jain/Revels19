@@ -46,22 +46,15 @@ class EventsController: UITableViewController {
         
         tableView.dataSource = self;
         tableView.delegate = self;
+
+        tableView.separatorStyle = .none
+        tableView.contentInset = .init(top: 8, left: 0, bottom: 8, right: 0)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {if let cell = self.collectionView.cellForItem(at: indexPath) as? EEventCell {
-//        // estimate
-//        let approximateWidthOfDescLabel = view.frame.width - 64
-//        let size = CGSize(width: approximateWidthOfDescLabel, height: 1000)
-//        let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)]
-//        let estimatedFrame = NSString(string: cell.descLabel.text!).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
-//        return CGSize(width: (view.frame.width-32), height: estimatedFrame.height + 75 + 52)
-//        }
-//        return CGSize(width: (view.frame.width-32), height: 200)
-//    }
+
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 300
