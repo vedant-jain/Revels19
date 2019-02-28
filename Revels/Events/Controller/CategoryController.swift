@@ -32,8 +32,12 @@ class CategoryController: UITableViewController {
         
         tableView.backgroundColor = .white
         
+        tableView.separatorStyle = .none
+        
         self.title = tapped
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        
+        tableView.contentInset = .init(top: 0, left: 0, bottom: 16, right: 0)
         
         getEvents()
     }
@@ -94,12 +98,26 @@ class CategoryController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! CategoryTVCell
         
         //background gradient
-        cell.backgroundCard.layer.insertSublayer(gradient(frame: CGRect(x: 0, y: 0, width: cell.frame.width-32, height: cell.frame.height-32), firstColor: firstColour[indexPath.item%firstColour.count], secondColor: secondColour[indexPath.item%secondColour.count]), at: 0)
+        cell.backgroundCard.layer.insertSublayer(gradient(frame: CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height), firstColor: firstColour[indexPath.item%firstColour.count], secondColor: secondColour[indexPath.item%secondColour.count]), at: 0)
 //        cell.backgroundColor = .gray
         
         //text
         cell.titleLabel.text = data[indexPath.item].name
         cell.descLabel.text = data[indexPath.item].description
+        
+        if let image = UIImage(named: data[indexPath.item].name.uppercased()) {
+            cell.bgImageView.image = image
+        } else {
+            if tapped.uppercased() == "CULTURAL" {
+                cell.bgImageView.image = UIImage(named: "culturalLogo")
+            }
+            else if tapped.uppercased() == "OPEN" {
+                cell.bgImageView.image = UIImage(named: "open")
+            }
+            else if tapped.uppercased() == "SUPPORTING" {
+                cell.bgImageView.image = UIImage(named: "supporting")
+            }
+        }
         
         //call button
         cell.callButton.tag = indexPath.row
@@ -140,4 +158,17 @@ class CategoryController: UITableViewController {
         return layer
     }
     
+}
+
+extension UIImage {
+    var noir: UIImage? {
+        let context = CIContext(options: nil)
+        guard let currentFilter = CIFilter(name: "CIPhotoEffectNoir") else { return nil }
+        currentFilter.setValue(CIImage(image: self), forKey: kCIInputImageKey)
+        if let output = currentFilter.outputImage,
+            let cgImage = context.createCGImage(output, from: output.extent) {
+            return UIImage(cgImage: cgImage, scale: scale, orientation: imageOrientation)
+        }
+        return nil
+    }
 }

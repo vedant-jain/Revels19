@@ -37,7 +37,7 @@ class EventsController: UITableViewController {
         tableView.delegate = self;
 
         tableView.separatorStyle = .none
-        tableView.contentInset = .init(top: 8, left: 0, bottom: 8, right: 0)
+        tableView.contentInset = .init(top: 0, left: 0, bottom: 16, right: 0)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -51,7 +51,7 @@ class EventsController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: EventTableViewCell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! EventTableViewCell
-        cell.backgroundCard.layer.insertSublayer(gradient(frame: CGRect(x: 0, y: 0, width: cell.frame.width-32, height: cell.frame.height-32), firstColor: firstColour[indexPath.item%firstColour.count], secondColor: secondColour[indexPath.item%secondColour.count]), at: 0)
+        cell.backgroundCard.layer.insertSublayer(gradient(frame: CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height), firstColor: firstColour[indexPath.item%firstColour.count], secondColor: secondColour[indexPath.item%secondColour.count]), at: 0)
         cell.titleLabel.text = data[indexPath.item].name
         cell.descLabel.text = data[indexPath.item].short_desc
         if (String(data[indexPath.item].min_size) == String(data[indexPath.item].max_size)) {
@@ -62,6 +62,10 @@ class EventsController: UITableViewController {
         cell.delegateCardLabel.text = "Delegate card: " + String(data[indexPath.item].del_card_type)
         cell.selectionStyle = .none
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(data[indexPath.item].id)
     }
     
     func gradient(frame:CGRect, firstColor: UIColor, secondColor: UIColor) -> CAGradientLayer {

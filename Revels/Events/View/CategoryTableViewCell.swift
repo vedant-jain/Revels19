@@ -51,7 +51,7 @@ class CategoryTVCell: UITableViewCell {
     var callButton: UIButton = {
         let button = UIButton()
         
-        button.layer.cornerRadius = 17
+        button.layer.cornerRadius = 10
         button.setImage(UIImage(named: "phone"), for: .normal)
         button.backgroundColor = UIColor.init(white: 1, alpha: 0.3)
         
@@ -60,24 +60,40 @@ class CategoryTVCell: UITableViewCell {
     
     var backgroundCard: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 17
+        view.layer.cornerRadius = 10
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
+    var bgImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        imageView.image = UIImage()
+        imageView.alpha = 0.2
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 10
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+    
     func setupViews() {
         
         addSubview(backgroundCard)
+        addSubview(bgImageView)
         addSubview(titleLabel)
         addSubview(descLabel)
         addSubview(callButton)
         
-        _ = backgroundCard.anchor(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 0, heightConstant: 0)
+        _ = backgroundCard.anchor(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 16, widthConstant: 0, heightConstant: 0)
         _ = titleLabel.anchor(backgroundCard.topAnchor, left: backgroundCard.leftAnchor, bottom: nil, right: nil
             , topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 25)
         _ = descLabel.anchor(titleLabel.bottomAnchor, left: backgroundCard.leftAnchor, bottom: callButton.topAnchor, right: backgroundCard.rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 0, heightConstant: 0)
         _ = callButton.anchor(nil, left: nil, bottom: backgroundCard.bottomAnchor, right: backgroundCard.rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 50, heightConstant: 50)
+        
+//        bgImageView.frame = CGRect(x: 15, y: 0, width: 250, height: 250)
+        
+        _ = bgImageView.anchor(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 120, leftConstant: 20, bottomConstant: 0, rightConstant: 120, widthConstant: 50, heightConstant: 50)
         
         //for testing
 //        backgroundCard.frame = CGRect(x: 16, y: 16, width: self.frame.width-32, height: self.frame.height-32)

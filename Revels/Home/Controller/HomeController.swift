@@ -8,11 +8,14 @@
 
 import UIKit
 import Alamofire
+import SafariServices
 
-class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SFSafariViewControllerDelegate {
     
     fileprivate let cellId = "cellId"
     fileprivate let headerId = "headerId"
+    fileprivate let postID = "postID"
+    
     fileprivate let padding: CGFloat = 16
     fileprivate var lightStatusBar: Bool = true
     var categories = [Categories]()
@@ -43,40 +46,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     fileprivate func setupCollectionView() {
         collectionView.backgroundColor = .white
         collectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.register(categoryCell1.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
     }
-    
-    func getCategories(){
-//       print(UserDefaults.standard.array(forKey: "categories"))
-        
-        Alamofire.request("https://api.mitrevels.in/categories", method: .get, parameters: nil).responseJSON { response in
-            switch response.result {
-            case .success:
-                if let data = response.data{
-                    do{
-                        let response = try JSONDecoder().decode(CategoriesResponse.self, from: data)
-                        if let categories = response.data{
-                            self.categories = categories
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                self.collectionView.refreshControl?.endRefreshing()
-                                self.collectionView.reloadData()
-                                print("Succesfully got data")
-                            }
-                        }else{
-                            print("Coudnt get data")
-                        }
-                    }catch let error{
-                        print(error)
-                    }
-                }
-                break
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-
     
     fileprivate func setupCustomNavigationBar() {
         view.addSubview(headerBar)
@@ -134,19 +106,14 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return headerView!
     }
     
-    
-    private let cellID = "cellID"
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupCollectionView()
         setupCustomNavigationBar()
-        getCategories()
-        getUserDetails()
-        getRegisteredEvents()
         
-        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellID)
+        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: postID)
         
         collectionView.backgroundColor = .white
         
@@ -170,77 +137,101 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: HomeCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! HomeCell
-        cell.title.text = categories[indexPath.item].name
-        cell.subtitle.text = categories[indexPath.item].description
-        return cell
+        
+        if (indexPath.item == 1) {
+            let cell: PostCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: postID, for: indexPath) as! PostCollectionViewCell
+            cell.headerLabel.text = "MIT Post"
+            cell.newsletterButton.addTarget(self, action: #selector(openLink), for: .touchUpInside)
+            cell.newsletterButton.setBackgroundImage(UIImage(named: "newspaper"), for: .normal)
+            cell.newsletterButton.tag = 0
+            cell.liveBlogButton.addTarget(self, action: #selector(openLink), for: .touchUpInside)
+            cell.liveBlogButton.tag = 1
+            cell.liveBlogButton.setBackgroundImage(UIImage(named: "newspaper2"), for: .normal)
+            cell.instagramButton.tag = 2
+            cell.instagramButton.addTarget(self, action: #selector(openLink), for: .touchUpInside)
+            cell.instagramButton.setBackgroundImage(UIImage(named: "ig"), for: .normal)
+            return cell
+        } else {
+            let cell: HomeCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! HomeCell
+            cell.title.text = "Events Today"
+            let currentDate = Date()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "d MMMM, EEEE"
+            let dayText = formatter.string(from: currentDate)
+            cell.subtitle.text = dayText
+            return cell
+        }
+    }
+
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        controller.dismiss(animated: true, completion: nil)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categories.count
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if let description = categories[indexPath.item].description {
-            return CGSize(width: view.frame.width, height: 160 + getHeight(for: description, font: UIFont.systemFont(ofSize: 15), width: view.frame.width - 32))
+        
+        if indexPath.item == 1 {
+            return CGSize(width: view.frame.width, height: 400)
         }
-        return CGSize(width: view.frame.width, height: 200)
+        
+        return CGSize(width: view.frame.width, height: 300)
 
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-    
-    func getHeight(for string: String, font: UIFont, width: CGFloat) -> CGFloat {
-        let textStorage = NSTextStorage(string: string)
-        let textContainter = NSTextContainer(size: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude))
-        let layoutManager = NSLayoutManager()
-        layoutManager.addTextContainer(textContainter)
-        textStorage.addLayoutManager(layoutManager)
-        textStorage.addAttribute(NSAttributedString.Key.font, value: font, range: NSMakeRange(0, textStorage.length))
-        textContainter.lineFragmentPadding = 0.0
-        layoutManager.glyphRange(for: textContainter)
-        return layoutManager.usedRect(for: textContainter).size.height
-    }
-    
-    func getUserDetails(){
-        Alamofire.request("https://register.mitrevels.in/userProfile", method: .get, parameters: nil).responseJSON { response in
-            switch response.result {
-            case .success:
-                if let data = response.data{
-                    do{
-                        let response = try JSONDecoder().decode(userProfileResponse.self, from: data)
-                        print(response.data)
-                    }catch let error{
-                        print(error)
-                    }
-                }
-                break
-            case .failure(let error):
-                print(error)
+
+    @objc func openLink(sender: UIButton) {
+        var urlString = ""
+        var url = URL(string: urlString)
+        if sender.tag == 0 {
+            // open newsletter
+            let currentDate = Date()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd"
+            let day = String((Int(formatter.string(from: currentDate)) ?? -1) - 6)
+            formatter.dateFormat = "HH"
+            let hours = formatter.string(from: currentDate)
+            urlString = "https://google.com/"
+            if Int(day) == 0 {
+                urlString.append(String(0))
             }
+            else{
+                if (Int(hours) ?? -1 < 8) {
+                    //show previous day's
+                    urlString.append(String((Int(day) ?? -1)-1))
+                } else {
+                    // show
+                    urlString.append(day)
+                }
+            }
+            url = URL(string: urlString)
+            let safariVC = SFSafariViewController(url: url ?? URL(string: "https://google.com")!)
+            self.present(safariVC, animated: true, completion: nil)
+            safariVC.delegate = self
+        }
+        else if sender.tag == 1 {
+            // open live blog
+            urlString = "http://themitpost.com/revels-19-liveblog"
+            url = URL(string: urlString)
+            let safariVC = SFSafariViewController(url: url ?? URL(string: "https://google.com")!)
+            self.present(safariVC, animated: true, completion: nil)
+            safariVC.delegate = self
+        }
+        else {
+            // open instagram
+            urlString = "http://instagram.com/mitrevels"
+            url = URL(string: urlString)
+            let safariVC = SFSafariViewController(url: url ?? URL(string: "https://instagram.com/mitrevels")!)
+            self.present(safariVC, animated: true, completion: nil)
+            safariVC.delegate = self
         }
     }
-    
-    func getRegisteredEvents(){
-        Alamofire.request("https://register.mitrevels.in/registeredEvents", method: .get, parameters: nil).responseJSON { response in
-            switch response.result {
-            case .success:
-                if let data = response.data{
-                    do{
-                        let response = try JSONDecoder().decode(registeredEventsResponse.self, from: data)
-                        print(response.data)
-                    }catch let error{
-                        print(error)
-                    }
-                }
-                break
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
+
 }
 
 
@@ -254,6 +245,20 @@ class CategoryTableViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
     }
     
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return categories.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
+        cell.textLabel?.text = categories[indexPath.row].name
+        return cell
+    }
+
     func getCategories(){
         Alamofire.request("https://api.mitrevels.in/categories", method: .get, parameters: nil).responseJSON { response in
             switch response.result {
@@ -303,21 +308,5 @@ class CategoryTableViewController: UITableViewController {
             }
         }
     }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
-        cell.textLabel?.text = categories[indexPath.row].name
-        return cell
-    }
-
-    
     
 }

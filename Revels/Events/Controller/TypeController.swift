@@ -92,10 +92,20 @@ class TypeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         cell.title.text = type[indexPath.item]
         cell.category.text = String(eventCount[indexPath.item]) + " categories"
         if indexPath.item == 0 {
-            cell.imageView = UIImageView.init(image: UIImage.init(named: "culturalLogo"))
-            cell.bgImageView = UIImageView.init(image: UIImage.init(named:"culturalLogo"))
-        } else {
-            cell.imageView = UIImageView.init(image: UIImage.init(named: "CellIcons"))
+            cell.imageView.image = UIImage(named: "culturalLogo")
+            cell.bgImageView.image = UIImage(named: "culturalLogo")
+        }
+        else if indexPath.item == 1 {
+            cell.imageView.image = UIImage(named: "open")
+            cell.bgImageView.image = UIImage(named: "open")
+        }
+        else if indexPath.item == 2 {
+            cell.imageView.image = UIImage(named: "supporting")
+            cell.bgImageView.image = UIImage(named: "supporting")
+        }
+        else {
+            cell.imageView.image = UIImage(named: "bigtrans")
+            cell.bgImageView.image = UIImage(named: "bigtrans")
         }
         return cell
     }

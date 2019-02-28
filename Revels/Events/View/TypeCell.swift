@@ -21,19 +21,19 @@ class TypeCell: UICollectionViewCell {
     
     var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "bigtrans")
+        imageView.image = UIImage()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 16
+        imageView.layer.cornerRadius = 10
         imageView.layer.masksToBounds = true
         return imageView
     }()
     
     var bgImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "bigtrans")
+        imageView.image = UIImage()
         imageView.alpha = 0.2
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 16
+        imageView.layer.cornerRadius = 10
         imageView.layer.masksToBounds = true
         return imageView
     }()
@@ -61,7 +61,7 @@ class TypeCell: UICollectionViewCell {
         
         self.translatesAutoresizingMaskIntoConstraints = false
         self.layer.masksToBounds = true
-        self.layer.cornerRadius = 17
+        self.layer.cornerRadius = 10
         
         imageView.frame = CGRect(x: 23, y: 16, width: 50, height: 50)
         title.frame = CGRect(x: 96, y: 16, width: frame.width, height: 25)

@@ -17,7 +17,7 @@ class ResultsController: UITableViewController {
     private var sectionArray = [SectionState]()
     private var eventsArray = [EventStruct]()
     
-    private let preset = ["Round #", "Position", "Team Name"]
+    private let preset = ["Round #", "Position", "Team ID"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +28,8 @@ class ResultsController: UITableViewController {
         
         self.title = "Results"
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        
+        tableView.separatorStyle = .none
         
         networking()
         
@@ -74,7 +76,7 @@ class ResultsController: UITableViewController {
                             if present == 0 {
                                 for j in self.eventsArray {
                                     if j.id == ele.event {
-                                        self.sectionArray.append(SectionState(isExpanded: true, name: j.name, eventID: ele.event, count: 1, results: [ele]))
+                                        self.sectionArray.append(SectionState(isExpanded: false, name: j.name, eventID: ele.event, count: 1, results: [ele]))
                                     }
                                 }
                             }
@@ -122,7 +124,7 @@ class ResultsController: UITableViewController {
             
             let collapseButton: UIButton = {
                 let button = UIButton(type: .system)
-                button.setTitle(sectionArray[section].isExpanded ? "Show Less" : "Show More", for: .normal)
+//                button.setTitle(sectionArray[section].isExpanded ? "Show Less" : "Show More", for: .normal)
                 button.tag = section
                 button.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
                 return button
@@ -130,8 +132,11 @@ class ResultsController: UITableViewController {
             
             let eventLabel: UILabel = {
                 let label = UILabel()
-                label.text = "Event: " + String(sectionArray[section].eventID)
-                label.font = UIFont.boldSystemFont(ofSize: 28)
+                label.text = String(sectionArray[section].name)
+//                label.font = UIFont.boldSystemFont(ofSize: 23)
+                label.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.semibold)
+                label.numberOfLines = 2
+                label.textAlignment = .left
                 return label
             }()
             
@@ -139,8 +144,10 @@ class ResultsController: UITableViewController {
             view.addSubview(collapseButton)
             view.addSubview(eventLabel)
             
-            eventLabel.frame = CGRect(x: 16, y: 16, width: view.frame.width-128, height: view.frame.height-32)
-            collapseButton.frame = CGRect(x: view.frame.width-128, y: 16, width: 128, height: view.frame.height-32)
+            view.bringSubviewToFront(collapseButton)
+            
+            eventLabel.frame = CGRect(x: 16, y: 16, width: view.frame.width-16, height: view.frame.height-32)
+            collapseButton.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
             
             //            eventLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
             //            eventLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
@@ -159,24 +166,26 @@ class ResultsController: UITableViewController {
         
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Event: " + String(sectionArray[section].eventID)
-    }
-    
-    
-    
     @objc func handleExpandClose(button: UIButton) {
         // close section by deleting the rows in that section
         let section = button.tag
         let isExpanded = sectionArray[section].isExpanded
         var indexPaths: [IndexPath] = []
-        for row in 4 ..< sectionArray[section].count {
+        for row in 0 ..< sectionArray[section].count {
             let indexPath = IndexPath(row: row, section: section)
             indexPaths.append(indexPath)
         }
         sectionArray[section].isExpanded = !isExpanded
         
-        button.setTitle(isExpanded ? "Show More" : "Show Less", for: .normal)
+//        button.setTitle(isExpanded ? "Show More" : "Show Less", for: .normal)
+        
+        if isExpanded {
+//            button.setImage(UIImage(named: "downarrow"), for: UIControl.State.disabled)
+        }
+        else {
+//            button.setImage(UIImage(named: "uparrow"), for: .normal)
+        }
+        
         
         if isExpanded {
             tableView.deleteRows(at: indexPaths, with: .fade)
@@ -205,10 +214,12 @@ class ResultsController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if sectionArray[section].isExpanded {
+//            print(sectionArray[section].name, " ", sectionArray[section].count)
             return sectionArray[section].count
         }
         else {
-            return 4
+//            print(sectionArray[section].name, " ", 4)
+            return 0
         }
     }
     
