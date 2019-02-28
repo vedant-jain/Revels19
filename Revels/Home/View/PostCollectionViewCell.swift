@@ -53,7 +53,7 @@ class PostCollectionViewCell: UICollectionViewCell {
         button.backgroundColor = .lightGray
         button.layer.cornerRadius = 10
         button.layer.masksToBounds = true
-        button.setTitle("@mitrevels", for: .normal)
+        button.setTitle("@revelsmit", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
