@@ -33,7 +33,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         view.addSubview(blurEffectView)
         return view
     }()
-    
+
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -42,6 +42,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return label
     }()
 
+    let infoButton: UIButton = {
+        let button = UIButton(type: .infoLight)
+        button.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        button.tintColor = .white
+        return button
+    }()
     
     fileprivate func setupCollectionView() {
         collectionView.backgroundColor = .white
@@ -55,6 +61,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         headerBar.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: UIEdgeInsets.init(), size: CGSize.init(width: view.frame.width, height: 45+UIApplication.shared.statusBarFrame.height))
         headerBar.addSubview(titleLabel)
         titleLabel.anchor(top: nil, leading: headerBar.leadingAnchor, bottom: headerBar.bottomAnchor, trailing: headerBar.trailingAnchor, padding: UIEdgeInsets.init(top: 0, left: 16, bottom: 10, right: 16), size: CGSize.init())
+        headerBar.addSubview(infoButton)
+        infoButton.anchor(top: nil, leading: titleLabel.trailingAnchor, bottom: headerBar.bottomAnchor, trailing: headerBar.trailingAnchor, padding: UIEdgeInsets.init(top: 0, left: 16, bottom: 10, right: 16), size: CGSize.init())
         headerBar.alpha = 0
     }
     
@@ -102,7 +110,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? HeaderView
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? HeaderView
+        headerView?.infoButton.addTarget(self, action: #selector(openInfoView), for: .touchUpInside)
         return headerView!
     }
     
@@ -183,6 +192,14 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    
+    @objc func openInfoView() {
+
+        let about = AboutCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        let aboutNavigationController = UINavigationController(rootViewController: about)
+        self.present(aboutNavigationController, animated: true, completion: nil)
+        
     }
 
     @objc func openLink(sender: UIButton) {

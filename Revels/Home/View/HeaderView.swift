@@ -25,6 +25,13 @@ class HeaderView: UICollectionReusableView {
         return label
     }()
     
+    let infoButton: UIButton = {
+        let button = UIButton(type: .infoLight)
+        button.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        button.tintColor = .white
+        return button
+    }()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,6 +44,9 @@ class HeaderView: UICollectionReusableView {
         setupVisualEffectBlur()
         addSubview(titleLabel)
         titleLabel.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, padding: UIEdgeInsets.init(top: 0, left: 16, bottom: 16, right: 16), size: CGSize.init())
+        print("added infoButton")
+        addSubview(infoButton)
+        infoButton.anchor(top: nil, leading: nil, bottom: bottomAnchor, trailing: trailingAnchor, padding: UIEdgeInsets.init(top: 0, left: 16, bottom: 10, right: 16), size: CGSize(width: 44, height: 44))
     }
     
     @objc func willEnterForeground(){
