@@ -67,7 +67,7 @@ class PostCollectionViewCell: UICollectionViewCell {
         
         self.bringSubviewToFront(headerLabel)
         
-        _ = headerLabel.anchor(topAnchor, left: leftAnchor, bottom: newsletterButton.topAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 0, heightConstant: 25)
+        _ = headerLabel.anchor(topAnchor, left: leftAnchor, bottom: newsletterButton.topAnchor, right: rightAnchor, topConstant: 0, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: 0, heightConstant: 25)
         _ = newsletterButton.anchor(headerLabel.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 0, rightConstant: 16, widthConstant: 0, heightConstant: 100)
         _ = liveBlogButton.anchor(newsletterButton.topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 116, leftConstant: 16, bottomConstant: 0, rightConstant: 16, widthConstant: 0, heightConstant: 100)
         _ = instagramButton.anchor(liveBlogButton.topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: 116, leftConstant: 16, bottomConstant: 0, rightConstant: 16, widthConstant: 0, heightConstant: 100)

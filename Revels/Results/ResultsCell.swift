@@ -22,19 +22,16 @@ class ResultsCell: UITableViewCell {
     
     var roundLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
         return UILabel()
     }()
     
     var positionLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
         return UILabel()
     }()
     
     var teamLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
         return UILabel()
     }()
     
@@ -44,9 +41,14 @@ class ResultsCell: UITableViewCell {
         addSubview(positionLabel)
         addSubview(teamLabel)
         
-        roundLabel.frame = CGRect(x: 16, y: 0, width: 100, height: frame.height)
-        positionLabel.frame = CGRect(x: 132, y: 0, width: 100, height: frame.height)
-        teamLabel.frame = CGRect(x: 245, y: 0, width: 100, height: frame.height)
+        //don't move this to label initialisers
+        roundLabel.textAlignment = .center
+        positionLabel.textAlignment = .center
+        teamLabel.textAlignment = .center
+        
+        _ = roundLabel.anchor(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: positionLabel.leftAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: (frame.width/3)-32, heightConstant: 0)
+        _ = positionLabel.anchor(topAnchor, left: roundLabel.rightAnchor, bottom: bottomAnchor, right: teamLabel.leftAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: (frame.width/3)-32, heightConstant: 0)
+        _ = teamLabel.anchor(topAnchor, left: positionLabel.rightAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 16, leftConstant: 16, bottomConstant: 16, rightConstant: 16, widthConstant: (frame.width/3)-32, heightConstant: 0)
         
     }
     

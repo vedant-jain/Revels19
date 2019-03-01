@@ -14,6 +14,7 @@ class AboutCollectionViewController: UICollectionViewController, UICollectionVie
     private let names = ["Saptarshi", "Ritvik", "Harsh", "Akshit", "Ankush", "Naman", "Vaishnavi", "Vedant"]
     private let images: [UIImage] = [UIImage(named: "saptarshi") ?? UIImage(), UIImage(named: "ritvik") ?? UIImage(), UIImage(named: "harsh") ?? UIImage(), UIImage(named: "ankush") ?? UIImage(), UIImage(named: "naman") ?? UIImage(), UIImage(named: "vaishnavi") ?? UIImage(), UIImage(named: "vedant") ?? UIImage()]
     private let posts = [1, 1, 1, 0, 0, 0 ,0, 0]
+    private let platform = [0, 0, 1, 0, 0, 1, 0, 1]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +45,7 @@ class AboutCollectionViewController: UICollectionViewController, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (view.frame.width/2)-32, height: 220)
+        return CGSize(width: (view.frame.width/2)-24, height: 220)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -61,6 +62,13 @@ class AboutCollectionViewController: UICollectionViewController, UICollectionVie
         }
         else {
             cell.postLabel.text = "Organizer"
+        }
+        
+        if platform[indexPath.item] == 0 {
+            cell.platformLabel.text = "Android"
+        }
+        else {
+            cell.platformLabel.text = "iOS"
         }
         return cell
     }

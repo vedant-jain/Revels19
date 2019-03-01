@@ -170,7 +170,7 @@ class ResultsController: UITableViewController {
         let section = button.tag
         let isExpanded = sectionArray[section].isExpanded
         var indexPaths: [IndexPath] = []
-        for row in 0 ..< sectionArray[section].count {
+        for row in 0 ..< sectionArray[section].count + 1 {
             let indexPath = IndexPath(row: row, section: section)
             indexPaths.append(indexPath)
         }
@@ -202,10 +202,10 @@ class ResultsController: UITableViewController {
             cell.teamLabel.text = preset[2]
         }
         else {
-            let result = sectionArray[indexPath.section].results[indexPath.item]
-            cell.roundLabel.text = "\t" + String(result.round)
-            cell.positionLabel.text = "\t" + String(result.position)
-            cell.teamLabel.text = "\t" + String(result.teamid)
+            let result = sectionArray[indexPath.section].results[indexPath.item-1]
+            cell.roundLabel.text = String(result.round)
+            cell.positionLabel.text = String(result.position)
+            cell.teamLabel.text = String(result.teamid)
         }
         if indexPath.item % 2 == 0 {
             cell.backgroundColor = UIColor(r: 240, g: 240, b: 240)
@@ -219,11 +219,9 @@ class ResultsController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if sectionArray[section].isExpanded {
-//            print(sectionArray[section].name, " ", sectionArray[section].count)
-            return sectionArray[section].count
+            return sectionArray[section].count + 1
         }
         else {
-//            print(sectionArray[section].name, " ", 4)
             return 0
         }
     }
